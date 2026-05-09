@@ -122,7 +122,7 @@
     <!-- 背景音乐 -->
     <audio id="bgMusic" loop preload="metadata" playsinline webkit-playsinline></audio>
 
-    <!-- 主���片 -->
+    <!-- 主卡片 -->
     <div class="card">
         <div class="flower">🌸</div>
         <h1 class="title">母亲节快乐</h1>
@@ -180,8 +180,8 @@
         const musicBtn = document.getElementById('musicBtn');
         let isPlaying = false;
 
-        // 设置音乐源（使用免费音乐API或本地文件）
-        bgMusic.src = 'https://music.163.com/song/media/outer/url?id=186015.mp3';
+        // 设置音乐源（使用免费音乐源）
+        bgMusic.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
 
         musicBtn.addEventListener('click', function() {
             if (isPlaying) {
