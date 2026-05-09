@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>母亲节快乐</title>
     
-    <!-- 微信分享配置（无图片版） -->
+    <!-- 微信分享配置 -->
     <meta property="og:title" content="母亲节快乐 | 给妈妈的专属祝福">
     <meta property="og:description" content="世界再大，有您在的地方才是家。祝妈妈永远年轻美丽！">
-    <meta property="og:url" content="https://你的仓库地址/"> <!-- 替换为你的GitHub Pages地址 -->
+    <meta property="og:url" content="https://2791890075.github.io/mothers-day/">
     <meta name="weixin-share-title" content="母亲节快乐">
     <meta name="weixin-share-desc" content="来自孩子的暖心祝福，请查收～">
 
@@ -104,9 +104,123 @@
             opacity: 0.8;
             letter-spacing: 1px;
         }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .card { padding: 30px 20px 25px; }
+            .title { font-size: 28px; }
+            .message { font-size: 15px; }
+            .music-btn { bottom: 20px; right: 20px; width: 45px; height: 45px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 背景音乐：适配微信播放限制 -->
-    <audio id="bgMusic" loop preload="metadata" playsinline webkit-playsinline src="https://music.163.com/song/media/outer/url?id=186015.mp3"></audio
+    <!-- 花瓣容器 -->
+    <div class="petals" id="petalsContainer"></div>
+
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop preload="metadata" playsinline webkit-playsinline></audio>
+
+    <!-- 主���片 -->
+    <div class="card">
+        <div class="flower">🌸</div>
+        <h1 class="title">母亲节快乐</h1>
+        <div class="subtitle">Happy Mother's Day</div>
+        <div class="divider"></div>
+        
+        <div class="message">
+            世界再大，有您在的地方才是家。<br>
+            感谢您的<span class="highlight">爱与陪伴</span>，<br>
+            祝妈妈永远<span class="highlight heart-beat">❤️</span>年轻美丽！
+        </div>
+
+        <div class="sign">
+            来自孩子的暖心祝福
+            <br>
+            <span class="heart-beat">💝</span>
+        </div>
+
+        <div class="share-tip">
+            💡 点击右下角🎵按钮播放音乐
+        </div>
+    </div>
+
+    <!-- 音乐控制按钮 -->
+    <button class="music-btn" id="musicBtn" aria-label="播放/暂停音乐" title="点击播放音乐">🎵</button>
+
+    <script>
+        // 花瓣动画生成
+        function createPetal() {
+            const petalsContainer = document.getElementById('petalsContainer');
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.textContent = ['🌸', '🌼', '💐', '🌷'][Math.floor(Math.random() * 4)];
+            
+            const startX = Math.random() * window.innerWidth;
+            const duration = 8 + Math.random() * 4; // 8-12秒
+            
+            petal.style.left = startX + 'px';
+            petal.style.animation = `fall ${duration}s linear infinite`;
+            petal.style.animationDelay = Math.random() * 2 + 's';
+            
+            petalsContainer.appendChild(petal);
+            
+            // 定期清理已落下的花瓣，避免DOM堆积
+            setTimeout(() => {
+                petal.remove();
+            }, (duration + 2) * 1000);
+        }
+
+        // 定期生成花瓣
+        setInterval(createPetal, 800);
+
+        // 音乐控制
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
+
+        // 设置音乐源（使用免费音乐API或本地文件）
+        bgMusic.src = 'https://music.163.com/song/media/outer/url?id=186015.mp3';
+
+        musicBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.textContent = '🎵';
+                isPlaying = false;
+            } else {
+                // 处理微信等环境的播放限制
+                bgMusic.play().catch(function(error) {
+                    console.log('自动播放被阻止，需要用户交互');
+                });
+                musicBtn.classList.add('playing');
+                musicBtn.textContent = '⏸️';
+                isPlaying = true;
+            }
+        });
+
+        // 监听音乐播放/暂停状态
+        bgMusic.addEventListener('play', function() {
+            musicBtn.classList.add('playing');
+            musicBtn.textContent = '⏸️';
+            isPlaying = true;
+        });
+
+        bgMusic.addEventListener('pause', function() {
+            musicBtn.classList.remove('playing');
+            musicBtn.textContent = '🎵';
+            isPlaying = false;
+        });
+
+        // 页面加载完成后的初始化
+        window.addEventListener('load', function() {
+            // 尝试自动播放（在某些浏览器中会失败，这是正常的）
+            bgMusic.play().catch(function(error) {
+                console.log('自动播放被阻止，等待用户首次交互');
+            });
+        });
+    </script>
+
+</body>
+</html>
