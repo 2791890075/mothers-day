@@ -64,22 +64,24 @@
             line-height: 1.9;
             font-weight: 500;
             letter-spacing: 1px;
+            overflow: hidden;
+            border-right: 2px solid #d81b60;
+            white-space: pre-line;
+            margin: 0 auto;
+            min-height: 7em;
         }
-
         .highlight {
             color: #FF69B4;
             font-weight: bold;
             background: linear-gradient(transparent 60%, #FFE4E1 60%);
             padding: 0 2px;
         }
-
         .footer-img {
             width: 70%;
             max-width: 250px;
             margin-top: 10px;
             content: url('https://pic.rmb.bdstatic.com/f1c3b1b3b1b3b1b3b1b3b1b3b1b3b1b3.png@h_1280'); 
         }
-
         .btn-music {
             position: fixed;
             bottom: 30px;
@@ -120,15 +122,7 @@
 
         <div class="card">
             <div class="greeting">To 我最最亲爱的妈咪</div>
-            <div class="message">
-                你先是你自己，然后才是我的妈妈<br><br>
-                <span class="highlight">
-                    世界很大，但在您眼里我才是最棒的；<br>
-                    路途再远，也走不出您牵挂的目光。
-                </span><br><br>
-                妈妈，辛苦了，节日快乐！<br>
-                <span style="font-size: 20px;">❤️</span>
-            </div>
+            <div class="message" id="messageBox"></div>
         </div>
 
         <div class="footer-img"></div>
@@ -139,6 +133,33 @@
     <audio id="bgMusic" loop preload="auto" src="https://music.163.com/song/media/outer/url?id=186015.mp3"></audio>
 
     <script>
+        // 打字动画内容
+        const message = `你先是你自己，然后才是我的妈妈\n\n<span class="highlight">世界很大，但在您眼里我才是最棒的；\n路途再远，也走不出您牵挂的目光。</span>\n\n妈妈，辛苦了，节日快乐！\n<span style="font-size: 20px;">❤️</span>`;
+        const messageBox = document.getElementById('messageBox');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < message.length) {
+                if (message[i] === '<') {
+                    // 处理 html 标签整体插入
+                    let tag = '';
+                    while(message[i] !== '>' && i < message.length) tag += message[i++];
+                    tag += message[i++];
+                    messageBox.innerHTML += tag;
+                } else if (message[i] === '\n') {
+                    messageBox.innerHTML += '<br>';
+                    i++;
+                } else {
+                    messageBox.innerHTML += message[i++];
+                }
+                setTimeout(typeWriter, 23); // 调整快慢
+            } else {
+                messageBox.style.borderRight = "none";
+            }
+        }
+        typeWriter();
+
+        // 音乐播放
         const music = document.getElementById('bgMusic');
         const btn = document.getElementById('musicBtn');
         let isPlaying = false;
@@ -147,7 +168,7 @@
             if (isPlaying) {
                 music.pause();
             } else {
-                music.play().catch(()=>{});
+                music.play().catch(()=>{}); // 用户交互必可自动放
             }
         }
         btn.onclick = toggleMusic;
@@ -160,8 +181,12 @@
             btn.innerText = "🎵";
             isPlaying = false;
         });
+
+        // 页面加载后尝试自动播放
         window.onload = () => {
-            music.play().catch(()=>{});
+            music.play().catch(()=>{
+                btn.innerText = "🎵";
+            });
         }
     </script>
 </body>
