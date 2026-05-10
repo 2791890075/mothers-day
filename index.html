@@ -119,8 +119,8 @@
     <!-- 花瓣容器 -->
     <div class="petals" id="petalsContainer"></div>
 
-    <!-- 背景音乐 -->
-    <audio id="bgMusic" loop preload="metadata" playsinline webkit-playsinline></audio>
+    <!-- 背景音乐 (已加 src autoplay) -->
+    <audio id="bgMusic" src="https://cdn.jsdelivr.net/gh/2791890075/music.mp3@main/yes.mp3" autoplay loop preload="metadata" playsinline webkit-playsinline></audio>
 
     <!-- 主卡片 -->
     <div class="card">
@@ -156,33 +156,21 @@
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.textContent = ['🌸', '🌼', '💐', '🌷'][Math.floor(Math.random() * 4)];
-            
             const startX = Math.random() * window.innerWidth;
-            const duration = 8 + Math.random() * 4; // 8-12秒
-            
+            const duration = 8 + Math.random() * 4;
             petal.style.left = startX + 'px';
             petal.style.animation = `fall ${duration}s linear infinite`;
             petal.style.animationDelay = Math.random() * 2 + 's';
-            
             petalsContainer.appendChild(petal);
-            
-            // 定期清理已落下的花瓣，避免DOM堆积
-            setTimeout(() => {
-                petal.remove();
-            }, (duration + 2) * 1000);
+            setTimeout(() => { petal.remove(); }, (duration + 2) * 1000);
         }
-
-        // 定期生成花瓣
         setInterval(createPetal, 800);
 
         // 音乐控制
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         let isPlaying = false;
-
-        // 设置音乐源为周杰伦《听妈妈的话》
-        bgMusic.src = 'https://y.music.163.com/m/song?id=2736208702&userid=1490994444&dlt=0846&fx-wechatnew=t1&fx-wxqd=c&fx-wordtest=c&fx-listentest=t3&H5_DownloadVIPGift=#?thirdfrom=wx';
-
+        // ⬇️ 已移除bgMusic.src手动设置
         musicBtn.addEventListener('click', function() {
             if (isPlaying) {
                 bgMusic.pause();
@@ -190,7 +178,6 @@
                 musicBtn.textContent = '🎵';
                 isPlaying = false;
             } else {
-                // 处理微信等环境的播放限制
                 bgMusic.play().catch(function(error) {
                     console.log('自动播放被阻止，需要用户交互');
                 });
@@ -199,28 +186,21 @@
                 isPlaying = true;
             }
         });
-
-        // 监听音乐播放/暂停状态
         bgMusic.addEventListener('play', function() {
             musicBtn.classList.add('playing');
             musicBtn.textContent = '⏸️';
             isPlaying = true;
         });
-
         bgMusic.addEventListener('pause', function() {
             musicBtn.classList.remove('playing');
             musicBtn.textContent = '🎵';
             isPlaying = false;
         });
-
-        // 页面加载完成后的初始化
         window.addEventListener('load', function() {
-            // 尝试自动播放（在某些浏览器中会失败，这是正常的）
             bgMusic.play().catch(function(error) {
                 console.log('自动播放被阻止，等待用户首次交互');
             });
         });
     </script>
-
 </body>
 </html>
