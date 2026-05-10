@@ -58,6 +58,7 @@
             margin-bottom: 15px;
         }
 
+        /* 修改打字机动画速度 - 从4秒改为8秒 */
         .message {
             font-size: 16px;
             color: #8B0A50;
@@ -66,22 +67,35 @@
             letter-spacing: 1px;
             overflow: hidden;
             border-right: 2px solid #d81b60;
-            white-space: pre-line;
+            white-space: nowrap;
             margin: 0 auto;
-            min-height: 7em;
+            animation: typing 8s steps(40, end), blink-caret 0.75s step-end infinite;
         }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #d81b60; }
+        }
+
         .highlight {
             color: #FF69B4;
             font-weight: bold;
             background: linear-gradient(transparent 60%, #FFE4E1 60%);
             padding: 0 2px;
         }
+
         .footer-img {
             width: 70%;
             max-width: 250px;
             margin-top: 10px;
             content: url('https://pic.rmb.bdstatic.com/f1c3b1b3b1b3b1b3b1b3b1b3b1b3b1b3.png@h_1280'); 
         }
+
         .btn-music {
             position: fixed;
             bottom: 30px;
@@ -99,14 +113,26 @@
             cursor: pointer;
             z-index: 10;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: box-shadow 0.2s;
         }
-        .btn-music:hover { box-shadow: 0 4px 18px #ffb6c1a0; }
-        @media (max-width:480px){
-            .container{ max-width:96vw; }
-            .header-img,.footer-img{ max-width:95vw;}
-            .btn-music{ width:44px; height:44px; font-size:20px; bottom:14px; left:14px;}
-            .card{ padding:16px 6px;}
+        
+        /* 添加点击提示 */
+        .click-hint {
+            position: fixed;
+            bottom: 90px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #FF1493;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
         }
     </style>
 </head>
@@ -122,71 +148,74 @@
 
         <div class="card">
             <div class="greeting">To 我最最亲爱的妈咪</div>
-            <div class="message" id="messageBox"></div>
+            <div class="message">
+                你先是你自己，然后才是我的妈妈<br><br>
+                <span class="highlight">世界很大，但在您眼里我才是最棒的；<br>
+                路途再远，也走不出您牵挂的目光。</span><br><br>
+                妈妈，辛苦了，节日快乐！<br>
+                <span style="font-size: 20px;">❤️</span>
+            </div>
         </div>
 
         <div class="footer-img"></div>
     </div>
 
-    <div class="btn-music" id="musicBtn" title="播放/暂停音乐" aria-label="播放或暂停音乐">🎵</div>
+    <!-- 音乐按钮 -->
+    <div class="btn-music" onclick="toggleMusic()">🎵</div>
+    
+    <!-- 点击提示 -->
+    <div class="click-hint">点击页面任意位置播放音乐</div>
 
+    <!-- 背景音乐 -->
     <audio id="bgMusic" loop preload="auto" src="https://music.163.com/song/media/outer/url?id=186015.mp3"></audio>
 
     <script>
-        // 打字动画内容
-        const message = `你先是你自己，然后才是我的妈妈\n\n<span class="highlight">世界很大，但在您眼里我才是最棒的；\n路途再远，也走不出您牵挂的目光。</span>\n\n妈妈，辛苦了，节日快乐！\n<span style="font-size: 20px;">❤️</span>`;
-        const messageBox = document.getElementById('messageBox');
-        let i = 0;
-
-        function typeWriter() {
-            if (i < message.length) {
-                if (message[i] === '<') {
-                    // 处理 html 标签整体插入
-                    let tag = '';
-                    while(message[i] !== '>' && i < message.length) tag += message[i++];
-                    tag += message[i++];
-                    messageBox.innerHTML += tag;
-                } else if (message[i] === '\n') {
-                    messageBox.innerHTML += '<br>';
-                    i++;
-                } else {
-                    messageBox.innerHTML += message[i++];
-                }
-                setTimeout(typeWriter, 23); // 调整快慢
-            } else {
-                messageBox.style.borderRight = "none";
-            }
-        }
-        typeWriter();
-
-        // 音乐播放
         const music = document.getElementById('bgMusic');
-        const btn = document.getElementById('musicBtn');
+        const btn = document.querySelector('.btn-music');
+        const hint = document.querySelector('.click-hint');
         let isPlaying = false;
 
+        // 尝试自动播放
+        function tryAutoPlay() {
+            music.play().then(() => {
+                isPlaying = true;
+                btn.innerText = '🎵';
+                hint.style.display = 'none'; // 隐藏提示
+                console.log("音乐自动播放成功！");
+            }).catch(err => {
+                console.log("自动播放被拦截，等待用户交互...");
+                // 显示提示
+                hint.style.display = 'block';
+            });
+        }
+
+        // 页面加载后尝试播放
+        window.onload = tryAutoPlay;
+
+        // 点击页面任意位置播放音乐
+        document.body.addEventListener('click', function() {
+            if (!isPlaying) {
+                music.play().then(() => {
+                    isPlaying = true;
+                    btn.innerText = '🎵';
+                    hint.style.display = 'none'; // 隐藏提示
+                }).catch(e => {
+                    console.log("播放失败");
+                });
+            }
+        }, { once: true }); // 只执行一次
+
+        // 音乐按钮控制
         function toggleMusic() {
             if (isPlaying) {
                 music.pause();
+                btn.innerText = '🔇';
             } else {
-                music.play().catch(()=>{}); // 用户交互必可自动放
+                music.play();
+                btn.innerText = '🎵';
+                hint.style.display = 'none';
             }
-        }
-        btn.onclick = toggleMusic;
-
-        music.addEventListener('play', function(){
-            btn.innerText = "🔇";
-            isPlaying = true;
-        });
-        music.addEventListener('pause', function(){
-            btn.innerText = "🎵";
-            isPlaying = false;
-        });
-
-        // 页面加载后尝试自动播放
-        window.onload = () => {
-            music.play().catch(()=>{
-                btn.innerText = "🎵";
-            });
+            isPlaying = !isPlaying;
         }
     </script>
 </body>
