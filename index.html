@@ -4,203 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>母亲节快乐</title>
-    
-    <!-- 微信分享配置 -->
-    <meta property="og:title" content="母亲节快乐 | 给妈妈的专属祝福">
-    <meta property="og:description" content="世界再大，有您在的地方才是家。祝妈妈永远年轻美丽！">
-    <meta property="og:url" content="https://2791890075.github.io/mothers-day/">
-    <meta name="weixin-share-title" content="母亲节快乐">
-    <meta name="weixin-share-desc" content="来自孩子的暖心祝福，请查收～">
-
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1);
+            background: linear-gradient(180deg, #FFE4EC 0%, #FFC2D9 50%, #FFB6C1 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
             overflow-x: hidden;
             padding: 20px;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
+            position: relative;
         }
-        .petals { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-        .petal {
-            position: absolute; top: -60px; animation: fall linear infinite; opacity: 0.8; font-size: 28px;
-        }
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.9; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(110vh) rotate(720deg) scale(0.3); opacity: 0; }
-        }
-        .card {
-            background: rgba(255,255,255,0.92); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-radius: 28px; padding: 40px 30px 35px; max-width: 420px; width: 100%;
-            text-align: center; box-shadow: 0 20px 60px rgba(180,50,80,0.2), 0 0 0 1px rgba(255,255,255,0.6);
-            z-index: 1; position: relative; animation: cardIn 1.2s ease-out;
-        }
-        @keyframes cardIn {
-            0% { opacity: 0; transform: translateY(40px) scale(0.92); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .flower { font-size: 70px; margin-bottom: 5px; animation: bloom 1.6s ease-in-out infinite alternate; display: inline-block; }
-        @keyframes bloom { 0% { transform: scale(1); } 100% { transform: scale(1.12); } }
-        .title {
-            font-size: 32px; font-weight: 700;
-            background: linear-gradient(135deg, #d81b60, #e91e63, #c2185b);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            margin: 10px 0 5px; letter-spacing: 3px;
-        }
-        .subtitle { font-size: 15px; color: #ad1457; margin-bottom: 20px; letter-spacing: 2px; opacity: 0.8; }
-        .divider { width: 60px; height: 3px; background: linear-gradient(90deg, #f48fb1, #e91e63, #f48fb1); margin: 0 auto 22px; border-radius: 5px; }
-        .message { font-size: 17px; line-height: 2; color: #4a1526; margin-bottom: 28px; letter-spacing: 1px; }
-        .message .highlight { color: #d81b60; font-weight: 600; }
-        .sign { margin-top: 24px; font-size: 14px; color: #ad1457; opacity: 0.7; letter-spacing: 1px; }
-        .heart-beat { display: inline-block; animation: beat 1s ease-in-out infinite; }
-        @keyframes beat {
-            0%,100% { transform: scale(1); }
-            25% { transform: scale(1.2); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.15); }
-        }
+        .bg-deco { position: fixed; z-index: 0; opacity: 0.6; font-size: 40px; }
+        .bg-heart { top: 10%; left: 5%; transform: rotate(-20deg); color: #FF69B4; }
+        .bg-star { top: 15%; right: 8%; color: #FFD700; }
+        .bg-flower { bottom: 20%; left: 5%; transform: rotate(15deg); color: #FF1493; }
+        .bg-ribbon { bottom: 10%; right: 5%; transform: rotate(-10deg); color: #DB7093; }
 
-        /* 音乐按钮 */
-        .music-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 2px solid rgba(233,30,99,0.3);
-            font-size: 24px;
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 400px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 4px 15px rgba(180,50,80,0.2);
-            transition: all 0.3s;
-            user-select: none;
-        }
-        .music-btn:active { transform: scale(0.9); }
-        .music-btn.playing { animation: musicPulse 1.5s ease-in-out infinite; }
-        @keyframes musicPulse {
-            0%,100% { box-shadow: 0 4px 15px rgba(233,30,99,0.25); }
-            50% { box-shadow: 0 4px 25px rgba(233,30,99,0.5); }
         }
 
-        /* 微信分享提示 */
-        .share-tip {
-            margin-top: 15px;
-            font-size: 13px;
-            color: #ad1457;
-            opacity: 0.8;
+        .header-img {
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 10px;
+            content: url('https://pic.rmb.bdstatic.com/80c0775262067014c5278479f060edef.jpeg@h_1280');
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+            text-align: center;
+            position: relative;
+            border: 2px solid #FFF0F5;
+        }
+
+        .greeting {
+            font-size: 20px;
+            color: #FF1493;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            font-size: 16px;
+            color: #8B0A50;
+            line-height: 1.9;
+            font-weight: 500;
             letter-spacing: 1px;
         }
 
-        /* 响应式设计 */
-        @media (max-width: 480px) {
-            .card { padding: 30px 20px 25px; }
-            .title { font-size: 28px; }
-            .message { font-size: 15px; }
-            .music-btn { bottom: 20px; right: 20px; width: 45px; height: 45px; }
+        .highlight {
+            color: #FF69B4;
+            font-weight: bold;
+            background: linear-gradient(transparent 60%, #FFE4E1 60%);
+            padding: 0 2px;
+        }
+
+        .footer-img {
+            width: 70%;
+            max-width: 250px;
+            margin-top: 10px;
+            content: url('https://pic.rmb.bdstatic.com/f1c3b1b3b1b3b1b3b1b3b1b3b1b3b1b3.png@h_1280'); 
+        }
+
+        .btn-music {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+            border: 2px solid #FFB6C1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+        }
+        .btn-music:hover { box-shadow: 0 4px 18px #ffb6c1a0; }
+        @media (max-width:480px){
+            .container{ max-width:96vw; }
+            .header-img,.footer-img{ max-width:95vw;}
+            .btn-music{ width:44px; height:44px; font-size:20px; bottom:14px; left:14px;}
+            .card{ padding:16px 6px;}
         }
     </style>
 </head>
 <body>
 
-    <!-- 花瓣容器 -->
-    <div class="petals" id="petalsContainer"></div>
+    <div class="bg-deco bg-heart">💖</div>
+    <div class="bg-deco bg-star">✨</div>
+    <div class="bg-deco bg-flower">🌸</div>
+    <div class="bg-deco bg-ribbon">🎀</div>
 
-    <!-- 背景音乐 (已加 src autoplay) -->
-    <audio id="bgMusic" src="https://cdn.jsdelivr.net/gh/2791890075/music.mp3@main/yes.mp3" autoplay loop preload="metadata" playsinline webkit-playsinline></audio>
+    <div class="container">
+        <div class="header-img"></div>
 
-    <!-- 主卡片 -->
-    <div class="card">
-        <div class="flower">🌸</div>
-        <h1 class="title">母亲节快乐</h1>
-        <div class="subtitle">Happy Mother's Day</div>
-        <div class="divider"></div>
-        
-        <div class="message">
-            世界再大，有您在的地方才是家。<br>
-            感谢您的<span class="highlight">爱与陪伴</span>，<br>
-            祝妈妈永远<span class="highlight heart-beat">❤️</span>年轻美丽！
+        <div class="card">
+            <div class="greeting">To 我最最亲爱的妈咪</div>
+            <div class="message">
+                你先是你自己，然后才是我的妈妈<br><br>
+                <span class="highlight">
+                    世界很大，但在您眼里我才是最棒的；<br>
+                    路途再远，也走不出您牵挂的目光。
+                </span><br><br>
+                妈妈，辛苦了，节日快乐！<br>
+                <span style="font-size: 20px;">❤️</span>
+            </div>
         </div>
 
-        <div class="sign">
-            来自孩子的暖心祝福
-            <br>
-            <span class="heart-beat">💝</span>
-        </div>
-
-        <div class="share-tip">
-            💡 点击右下角🎵按钮播放音乐（♪ 听妈妈的话 ♪）
-        </div>
+        <div class="footer-img"></div>
     </div>
 
-    <!-- 音乐控制按钮 -->
-    <button class="music-btn" id="musicBtn" aria-label="播放/暂停音乐" title="点击播放音乐">🎵</button>
+    <div class="btn-music" id="musicBtn" title="播放/暂停音乐" aria-label="播放或暂停音乐">🎵</div>
+
+    <audio id="bgMusic" loop preload="auto" src="https://music.163.com/song/media/outer/url?id=186015.mp3"></audio>
 
     <script>
-        // 花瓣动画生成
-        function createPetal() {
-            const petalsContainer = document.getElementById('petalsContainer');
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            petal.textContent = ['🌸', '🌼', '💐', '🌷'][Math.floor(Math.random() * 4)];
-            const startX = Math.random() * window.innerWidth;
-            const duration = 8 + Math.random() * 4;
-            petal.style.left = startX + 'px';
-            petal.style.animation = `fall ${duration}s linear infinite`;
-            petal.style.animationDelay = Math.random() * 2 + 's';
-            petalsContainer.appendChild(petal);
-            setTimeout(() => { petal.remove(); }, (duration + 2) * 1000);
-        }
-        setInterval(createPetal, 800);
-
-        // 音乐控制
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
+        const music = document.getElementById('bgMusic');
+        const btn = document.getElementById('musicBtn');
         let isPlaying = false;
-        // ⬇️ 已移除bgMusic.src手动设置
-        musicBtn.addEventListener('click', function() {
+
+        function toggleMusic() {
             if (isPlaying) {
-                bgMusic.pause();
-                musicBtn.classList.remove('playing');
-                musicBtn.textContent = '🎵';
-                isPlaying = false;
+                music.pause();
             } else {
-                bgMusic.play().catch(function(error) {
-                    console.log('自动播放被阻止，需要用户交互');
-                });
-                musicBtn.classList.add('playing');
-                musicBtn.textContent = '⏸️';
-                isPlaying = true;
+                music.play().catch(()=>{});
             }
-        });
-        bgMusic.addEventListener('play', function() {
-            musicBtn.classList.add('playing');
-            musicBtn.textContent = '⏸️';
+        }
+        btn.onclick = toggleMusic;
+
+        music.addEventListener('play', function(){
+            btn.innerText = "🔇";
             isPlaying = true;
         });
-        bgMusic.addEventListener('pause', function() {
-            musicBtn.classList.remove('playing');
-            musicBtn.textContent = '🎵';
+        music.addEventListener('pause', function(){
+            btn.innerText = "🎵";
             isPlaying = false;
         });
-        window.addEventListener('load', function() {
-            bgMusic.play().catch(function(error) {
-                console.log('自动播放被阻止，等待用户首次交互');
-            });
-        });
+        window.onload = () => {
+            music.play().catch(()=>{});
+        }
     </script>
 </body>
 </html>
